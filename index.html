@@ -229,7 +229,7 @@ const AVISOS = [["Uso del gafete","En caso de no portarlo, informarlo al cajero.
 const PROMO = null;
 
 /* VIDEO DE PORTADA — solo se muestra en la pantalla de inicio. Para quitarlo: const VIDEO = null; */
-const VIDEO = { src:"video-inicio.mp4", poster:"video-inicio.jpg" };
+const VIDEO = { src:"video-inicio.mp4?v=2", poster:"video-inicio.jpg?v=2" };
 
 const BOTONES = [
   ["menu","Menú de la semana","Platos fuertes de lunes a sábado","grande"],
@@ -318,6 +318,8 @@ function pintar(){
   vista.innerHTML = (VISTAS[id] || VISTAS.inicio)();
   const sel = vista.querySelector('.tab[aria-selected="true"]');
   if(sel && sel.scrollIntoView) sel.scrollIntoView({inline:"center",block:"nearest"});
+  const v = vista.querySelector(".intro video");
+  if(v){ v.muted = true; const pr = v.play(); if(pr && pr.catch) pr.catch(()=>{ v.controls = true; }); }
 }
 vista.addEventListener("click",ev=>{
   const pr = ev.target.closest(".promo");
