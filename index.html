@@ -50,6 +50,11 @@ details.card summary::-webkit-details-marker{display:none}
 details.card summary::after{content:"+";font-size:26px;line-height:.8;color:#9CC8F5}
 details.card[open] summary::after{content:"–"}
 details.card .pie{color:var(--acero);font-size:14px;border-top:1px solid var(--linea)}
+.intro{margin:0 0 14px;border-radius:14px;overflow:hidden;border:1px solid var(--linea);background:#FFFFFF}
+.intro video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#0B2545}
+.intro .pie-video{display:flex;justify-content:flex-end;padding:8px 10px;border-top:1px solid var(--linea)}
+.sonido{border:none;border-radius:999px;background:var(--marino);color:#FFFFFF;padding:7px 13px;font:700 13px 'Barlow',Arial,sans-serif;letter-spacing:.04em;cursor:pointer}
+.sonido:focus-visible{outline:3px solid var(--celeste);outline-offset:2px}
 .promo{display:block;margin:0 0 14px;border-radius:14px;overflow:hidden;border:1px solid var(--linea)}
 .promo img{display:block;width:100%;height:auto}
 .hoja{width:22px;height:22px;flex:none;align-self:center}
@@ -135,32 +140,32 @@ footer{text-align:center;color:var(--acero);font-size:13px;margin-top:26px;paddi
    ===================================================================== */
 const DIAS = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 
-/* 1. MENÚ DE LA SEMANA (solo platos fuertes) — semana del 12 al 16 de octubre
+/* 1. MENÚ DE LA SEMANA (solo platos fuertes) — semana del 26 al 31 de octubre 2026
    Para marcar un plato como vegetariano (hojita verde), termine el nombre con  *V
    "precio" es opcional: solo si el especial de ese día no cuesta el precio normal. */
 const MENU = {
   "Lunes": {
-    fuertes: ["Pollo al pesto (pechuga deshuesada)","Flauta de carne mechada con salsa cheddar chipotle","Carnitas de cerdo suizas","Zucchini relleno con carne de soya *V"],
-    especial: "Arroz con camarones especial"
+    fuertes: ["Filete de pescado al ajillo","Pastel de yuca con carne de cerdo al pastor","Penne con pollo en salsa de tomate","Falafel con aderezo de yogur *V"],
+    especial: "Sopa de pollo + bebida + postre"
   },
   "Martes": {
-    fuertes: ["Filete de corvineta al horno con chile y cebolla","Albóndigas en salsa de tomate","Garbanzos con pollo y papa","Pastel de yuca con vegetales *V"],
-    especial: "Chifrijo"
+    fuertes: ["Bistec de res en salsa oscura de hongos","Pollo estilo cacciatore","Frijoles tiernos con costilla de cerdo","Frijoles tiernos con verduras *V"],
+    especial: "Nachos mixtos (carne y pollo) + bebida + postre"
   },
   "Miércoles": {
-    fuertes: ["Bistec de res con chimichurri argentino","Arroz jardinero con pollo","Enyucados de atún con mayonesa de perejil","Tortas de soya en salsa de vegetales *V"],
-    especial: "Combo pollo frito: muslo y cadera con papas fritas y ensalada"
+    fuertes: ["Filete de pescado con olores","Mondongo en salsa","Carne de res en trocitos con cuartos de papa","Pastel de plátano maduro con frijoles *V"],
+    especial: "Milanesa de pollo con papas fritas"
   },
   "Jueves": {
-    fuertes: ["Pollo en salsa de mostaza, miel y naranja (pechuga deshuesada)","Trozos de res con zanahoria, repollo y vainica","Mini papitas con chorizo parrillero al horno","Croqueta de plátano maduro con frijol y salsa caribeña *V"],
-    especial: "Patacones a caballo"
+    fuertes: ["Pollo campesino","Picadillo de arracache y papa con carne mechada","Costilla de cerdo con yuca","Picadillo de papa y soya *V"],
+    especial: "Dúo especial: medio cantonés y medio chop suey con pan"
   },
   "Viernes": {
-    fuertes: ["Filete de pescado al curry","Fajitas de res con chile, cebolla y tomate (estilo criollo)","Spaghetti supremo con pollo","Wrap vegetariano con hummus *V"],
-    especial: "Tacos de carne mechada con ensalada de repollo (2 unidades), papas y bebida"
+    fuertes: ["Bistec de cerdo con chile morrón","Canelones con pollo en salsa de tomate","Estofado de res","Canelones con soya en salsa de espinaca *V"],
+    especial: "Pollo en salsa caribeña + bebida + postre"
   },
   "Sábado": {
-    fuertes: ["Chuleta de cerdo con chile y tomate","Fajitas de pollo con hongos","Canelones de carne molida en salsa de tomate"]
+    fuertes: ["Cordon bleu de pollo","Fajitas de res con chile, cebolla y tomate"]
   }
 };
 
@@ -223,6 +228,9 @@ const AVISOS = [["Uso del gafete","En caso de no portarlo, informarlo al cajero.
    "dia" es la pestaña del menú que se abre al tocarla. */
 const PROMO = null;
 
+/* VIDEO DE PORTADA — solo se muestra en la pantalla de inicio. Para quitarlo: const VIDEO = null; */
+const VIDEO = { src:"video-inicio.mp4", poster:"video-inicio.jpg" };
+
 const BOTONES = [
   ["menu","Menú de la semana","Platos fuertes de lunes a sábado","grande"],
   ["especial","Especial del día","Un plato distinto cada día","grande"],
@@ -253,7 +261,7 @@ const chips = arr => `<ul class="chips">${arr.map(x=>`<li>${e(x)}</li>`).join(""
 
 const VISTAS = {
   inicio(){
-    return (PROMO?`<a class="promo" href="#menu" data-dia="${DIAS.indexOf(PROMO.dia)}"><img src="${PROMO.img}" alt="${e(PROMO.alt)}"></a>`:"") + `<div class="botones">${BOTONES.map(([id,t,s,c])=>`<a class="bt ${c}" href="#${id}"><b>${e(t)}</b>${s?`<span>${e(s)}</span>`:""}</a>`).join("")}</div>`;
+    return (VIDEO?`<div class="intro"><video src="${VIDEO.src}" poster="${VIDEO.poster}" autoplay muted loop playsinline preload="auto" aria-label="Video promocional CocinArte"></video><div class="pie-video"><button class="sonido" type="button">Activar sonido</button></div></div>`:"") + (PROMO?`<a class="promo" href="#menu" data-dia="${DIAS.indexOf(PROMO.dia)}"><img src="${PROMO.img}" alt="${e(PROMO.alt)}"></a>`:"") + `<div class="botones">${BOTONES.map(([id,t,s,c])=>`<a class="bt ${c}" href="#${id}"><b>${e(t)}</b>${s?`<span>${e(s)}</span>`:""}</a>`).join("")}</div>`;
   },
   menu(){
     const d = MENU[DIAS[diaActivo]];
@@ -314,6 +322,8 @@ function pintar(){
 vista.addEventListener("click",ev=>{
   const pr = ev.target.closest(".promo");
   if(pr && +pr.dataset.dia>=0) diaActivo = +pr.dataset.dia;
+  const so = ev.target.closest(".sonido");
+  if(so){ const v = vista.querySelector(".intro video"); v.muted = !v.muted; if(!v.muted) v.play(); so.textContent = v.muted ? "Activar sonido" : "Silenciar"; return; }
   const t = ev.target.closest(".tab");
   if(t){ diaActivo = +t.dataset.dia; pintar(); }
 });
